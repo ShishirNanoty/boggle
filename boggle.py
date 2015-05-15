@@ -91,4 +91,6 @@ def main():
     user_words = get_words_from_user(board)
     print_result(board, user_words)
 
-main()
+
+if __name__ == "__man__":
+    main()
