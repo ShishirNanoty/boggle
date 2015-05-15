@@ -89,19 +89,30 @@ def search_at_next_index(board, possible_next_indices, word, used_indices):
 
 def adjacent(pos1, pos2, board_size):
     return ((abs(pos1 - pos2) == 1 and pos1 / board_size == pos2 / board_size) or
-            (abs(pos1 - pos2) == board_size - 1 and pos1 % board_size != pos2 / board_size)
+            (abs(pos1 - pos2) == board_size - 1 and pos1 / board_size != pos2 / board_size)
             or abs(pos1 - pos2) == board_size or abs(pos1 - pos2) == board_size + 1)
 
 
 def print_result(letters, user_words):
     print "Here are your results."
     score = 0
-    for word in user_words:
-        if check_if_word_in_board(word, letters):
-            print word, len(word)
-            score += len(word)
-        else:
-            print word, 'not on board'
+
+    with open('dictionary.txt') as f:
+        english_dict = [line.strip() for line in f.readlines()]
+
+        for word in user_words:
+
+            if not check_if_word_in_board(word, letters):
+                print word, 'not on board'
+
+            elif word not in english_dict:
+                print word, 'not in dictionary'
+
+            else:
+                print word, len(word)
+                score += len(word)
+
+
     print "Score: ", score
 
 
