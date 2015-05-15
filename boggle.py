@@ -3,33 +3,12 @@ import math
 
 
 cubes = [
-    'aaafrs',
-    'aaeeee',
-    'aafirs',
-    'adennn',
-    'aeeeem',
-    'aeegmu',
-    'aegmnn',
-    'afirsy',
-    'bjkqxz',
-    'ccenst',
-    'ceiilt',
-    'ceilpt',
-    'ceipst',
-    'ddhnot',
-    'dhhlor',
-    'dhlnor',
-    'dhlnor',
-    'eiiitt',
-    'emottt',
-    'ensssu',
-    'fiprsy',
-    'gorrvw',
-    'iprrry',
-    'nootuw',
-    'ooottu'
+    'aaafrs', 'aaeeee', 'aafirs', 'adennn', 'aeeeem',
+    'aeegmu', 'aegmnn', 'afirsy', 'bjkqxz', 'ccenst',
+    'ceiilt', 'ceilpt', 'ceipst', 'ddhnot', 'dhhlor',
+    'dhlnor', 'dhlnor', 'eiiitt', 'emottt', 'ensssu',
+    'fiprsy', 'gorrvw', 'iprrry', 'nootuw', 'ooottu'
 ]
-
 
 def print_board(letters):
     board_size = int(math.sqrt(len(letters)))
@@ -38,8 +17,7 @@ def print_board(letters):
         if (i + 1) % board_size == 0:
             print
 
-
-def get_user_words(letters):
+def get_words_from_user(board):
     print "Type 'done' when finished or 'board' to reprint board."
     user_words = []
     while True:
@@ -47,85 +25,70 @@ def get_user_words(letters):
         if word == 'done':
             break
         elif word == 'board':
-            print_board(letters)
+            print_board(board)
         else:
             user_words.append(word)
     return user_words
 
 
-def check_if_word_in_board(word, board):
-    if not word:
-        return False
-
-    first_letter = word[0]
-
-    indices = [i for i, letter in enumerate(board) if letter == first_letter]
-
-    return search_at_next_index(board, indices, word, [])
-
-
-
-def find_word_starting_at_index(board, word, index, used_indices):
+def find_word(board, word, used_indices=None):
     if len(word) == 0:
         return True
 
-    board_size = int(math.sqrt(len(board)))
-
-    possible_next_indices = [i for i, letter in enumerate(board) if (letter == word[0] and adjacent(i, index, board_size) and i not in used_indices)]
-
-    return search_at_next_index(board, possible_next_indices, word, used_indices)
-
-
-def search_at_next_index(board, possible_next_indices, word, used_indices):
-    if len(possible_next_indices) == 0:
-        return False
+    used_indices = used_indices or []
+    possible_next_indices = get_possible_next_indices(board, used_indices, word)
 
     for next_index in possible_next_indices:
-        word_found = find_word_starting_at_index(board, word[1:], next_index, used_indices + [next_index])
+        word_found = find_word(board, word[1:], used_indices + [next_index])
         if word_found:
             return True
     return False
 
 
-def adjacent(pos1, pos2, board_size):
+def get_possible_next_indices(board, used_indices, word):
+    return [i for i, letter in enumerate(board) if letter == word[0] and index_is_valid(i, used_indices, board)]
+
+
+def index_is_valid(index, used_indices, board):
+    return not used_indices or (adjacent(index, used_indices[-1], board) and index not in used_indices)
+
+
+def adjacent(pos1, pos2, board):
+    board_size = int(math.sqrt(len(board)))
     return ((abs(pos1 - pos2) == 1 and pos1 / board_size == pos2 / board_size) or
             (abs(pos1 - pos2) == board_size - 1 and pos1 / board_size != pos2 / board_size)
             or abs(pos1 - pos2) == board_size or abs(pos1 - pos2) == board_size + 1)
 
 
-def print_result(letters, user_words):
+def print_result(board, user_words):
     print "Here are your results."
     score = 0
 
     with open('dictionary.txt') as f:
         english_dict = [line.strip() for line in f.readlines()]
 
-        for word in user_words:
+    for word in user_words:
+        if not word:
+            continue
 
-            if not check_if_word_in_board(word, letters):
-                print word, 'not on board'
+        elif not find_word(word, board):
+            print word, 'not on board'
 
-            elif word not in english_dict:
-                print word, 'not in dictionary'
+        elif word not in english_dict:
+            print word, 'not in dictionary'
 
-            else:
-                print word, len(word)
-                score += len(word)
-
+        else:
+            print word, len(word)
+            score += len(word)
 
     print "Score: ", score
 
 
 def main():
-    letters = [random.choice(cube) for cube in cubes]
-    random.shuffle(letters)
-    print_board(letters)
-    user_words = get_user_words(letters)
-    print_result(letters, user_words)
-
+    board = [random.choice(cube) for cube in cubes]
+    random.shuffle(board)
+    print_board(board)
+    user_words = get_words_from_user(board)
+    print_result(board, user_words)
 
 main()
-
-
-
-
