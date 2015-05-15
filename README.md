@@ -23,7 +23,7 @@ e d r a e
 s q s m s
 s a l p o
 Enter word: done!
-Here are your results.
+Here are your results:
 lot 3
 sqs not in dictionary
 zzz not on board

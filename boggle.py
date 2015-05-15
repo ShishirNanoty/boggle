@@ -63,7 +63,7 @@ def adjacent(pos1, pos2, board):
 
 
 def print_result(board, user_words):
-    print "Here are your results."
+    print "Here are your results:"
     score = 0
 
     with open('dictionary.txt') as f:
