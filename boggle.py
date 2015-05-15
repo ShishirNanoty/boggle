@@ -10,12 +10,14 @@ cubes = [
     'fiprsy', 'gorrvw', 'iprrry', 'nootuw', 'ooottu'
 ]
 
+
 def print_board(letters):
     board_size = int(math.sqrt(len(letters)))
     for i in xrange(len(letters)):
         print letters[i],
         if (i + 1) % board_size == 0:
             print
+
 
 def get_words_from_user(board):
     print "Type 'done' when finished or 'board' to reprint board."
@@ -92,5 +94,5 @@ def main():
     print_result(board, user_words)
 
 
-if __name__ == "__man__":
+if __name__ == "__main__":
     main()
