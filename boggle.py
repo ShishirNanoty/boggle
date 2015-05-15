@@ -30,7 +30,7 @@ def get_words_from_user(board):
             print_board(board)
         else:
             user_words.append(word)
-    return user_words
+    return set(user_words)
 
 
 def find_word(board, word, used_indices=None):
