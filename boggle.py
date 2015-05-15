@@ -20,13 +20,13 @@ def print_board(letters):
 
 
 def get_words_from_user(board):
-    print "Type 'done' when finished or 'board' to reprint board."
+    print "Type 'done!' when finished or 'board!' to reprint board."
     user_words = []
     while True:
         word = raw_input('Enter word: ')
-        if word == 'done':
+        if word == 'done!':
             break
-        elif word == 'board':
+        elif word == 'board!':
             print_board(board)
         else:
             user_words.append(word)
@@ -73,7 +73,7 @@ def print_result(board, user_words):
         if not word:
             continue
 
-        elif not find_word(word, board):
+        elif not find_word(board, word):
             print word, 'not on board'
 
         elif word not in english_dict:
