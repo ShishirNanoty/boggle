@@ -67,13 +67,14 @@ def horizontal_adjacent(pos1, pos2, board_size):
 
 
 def vertical_adjacent(pos1, pos2, board_size):
-    return abs(pos1 - pos2) == board_size - 1 and pos1 / board_size != pos2 / board_size
-
-
+    return abs(pos1 - pos2) == board_size 
+    
+    
 def diagonal_adjacent(pos1, pos2, board_size):
-    return abs(pos1 - pos2) == board_size or abs(pos1 - pos2) == board_size + 1
-
-
+    return (abs(pos1 - pos2) == board_size - 1 and pos1 / board_size != pos2 / board_size
+          or abs(pos1 - pos2) == board_size + 1)
+  
+  
 def print_result(board, user_words):
     print "Here are your results:"
     score = 0
