@@ -1,6 +1,7 @@
 # January Python Workshop
-At the January 17th Python workshop we are going to work on adding some features to a simple Boggle game. You will need to bring a laptop 
-to participate. In the best case you will get through all the setup before arriving, but if you have trouble with any steps, do what you can and 
+At the 6pm January 17th Python workshop we are going to work on adding some features to a simple Boggle game. If you are an intermediate or expert Python user, feel free to come at 6pm to talk tech or, if needed, help out the folks here for the workshop.
+
+You will need to bring a laptop to participate. In the best case you will get through all the setup before arriving, but if you have trouble with any steps, do what you can and 
 we will help get you up to speed.
 
 1. Setup Python. Get Python 2.x installed on your laptop if you haven't already.
