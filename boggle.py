@@ -1,6 +1,13 @@
+# Backward compat for 2.x print statements
+from __future__ import print_function
 import random
 import math
 
+# Backward compat for 2.x input
+try:
+    input = raw_input
+except NameError:
+    pass
 
 cubes = [
     'aaafrs', 'aaeeee', 'aafirs', 'adennn', 'aeeeem',
@@ -13,17 +20,21 @@ cubes = [
 
 def print_board(letters):
     board_size = int(math.sqrt(len(letters)))
-    for i in xrange(len(letters)):
-        print letters[i],
+    line = ""
+    for i in range(len(letters)):
+        line += letters[i]
         if (i + 1) % board_size == 0:
-            print
+            print (line)
+            line = ""
+        else:
+            line += " "
 
 
 def get_words_from_user(board):
-    print "Type 'done!' when finished or 'board!' to reprint board."
+    print ("Type 'done!' when finished or 'board!' to reprint board.")
     user_words = []
     while True:
-        word = raw_input('Enter word: ')
+        word = input('Enter word: ')
         if word == 'done!':
             break
         elif word == 'board!':
@@ -60,23 +71,23 @@ def adjacent(pos1, pos2, board):
     return (horizontal_adjacent(pos1, pos2, board_size) or
             vertical_adjacent(pos1, pos2, board_size) or
             diagonal_adjacent(pos1, pos2, board_size))
-            
-            
+
+
 def horizontal_adjacent(pos1, pos2, board_size):
     return abs(pos1 - pos2) == 1 and pos1 / board_size == pos2 / board_size
 
 
 def vertical_adjacent(pos1, pos2, board_size):
-    return abs(pos1 - pos2) == board_size 
-    
-    
+    return abs(pos1 - pos2) == board_size
+
+
 def diagonal_adjacent(pos1, pos2, board_size):
     return (abs(pos1 - pos2) == board_size - 1 and pos1 / board_size != pos2 / board_size
           or abs(pos1 - pos2) == board_size + 1)
-  
-  
+
+
 def print_result(board, user_words):
-    print "Here are your results:"
+    print ("Here are your results:")
     score = 0
 
     with open('dictionary.txt') as f:
@@ -87,16 +98,16 @@ def print_result(board, user_words):
             continue
 
         elif not find_word(board, word):
-            print word, 'not on board'
+            print (word, 'not on board')
 
         elif word not in english_dict:
-            print word, 'not in dictionary'
+            print (word, 'not in dictionary')
 
         else:
-            print word, len(word)
+            print (word, len(word))
             score += len(word)
 
-    print "Score: ", score
+    print ("Score: ", score)
 
 
 def main():
