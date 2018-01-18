@@ -17,6 +17,17 @@ cubes = [
     'fiprsy', 'gorrvw', 'iprrry', 'nootuw', 'ooottu'
 ]
 
+# Simple Set of colors for ascii printing.
+class bcolors:
+    BLUE = '\033[94m'
+    GREEN = '\033[92m'
+    RED = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+
+# Build the dictionary up front so we can use in multiple places
+with open('dictionary.txt') as f:
+    english_dict = [line.strip() for line in f.readlines()]
 
 def print_board(letters):
     board_size = int(math.sqrt(len(letters)))
@@ -29,7 +40,6 @@ def print_board(letters):
         else:
             line += " "
 
-
 def get_words_from_user(board):
     print ("Type 'done!' when finished or 'board!' to reprint board.")
     user_words = []
@@ -39,6 +49,10 @@ def get_words_from_user(board):
             break
         elif word == 'board!':
             print_board(board)
+        elif not find_word(board,word):
+            print( bcolors.BOLD, word, bcolors.ENDC, bcolors.RED, 'Not found on board', bcolors.ENDC)
+        elif word not in english_dict:
+            print( bcolors.BOLD, word, bcolors.ENDC, bcolors.RED, 'Not found in dictionary', bcolors.ENDC)
         else:
             user_words.append(word)
     return set(user_words)
@@ -89,9 +103,6 @@ def diagonal_adjacent(pos1, pos2, board_size):
 def print_result(board, user_words):
     print ("Here are your results:")
     score = 0
-
-    with open('dictionary.txt') as f:
-        english_dict = [line.strip() for line in f.readlines()]
 
     for word in user_words:
         if not word:
