@@ -2,7 +2,9 @@
 from __future__ import print_function
 import random
 import math
-
+board = []
+user_words = []
+flg = False
 # Backward compat for 2.x input
 try:
     input = raw_input
@@ -30,6 +32,7 @@ with open('dictionary.txt') as f:
     english_dict = [line.strip() for line in f.readlines()]
 
 def print_board(letters):
+    # print('#1\n')
     board_size = int(math.sqrt(len(letters)))
     line = ""
     for i in range(len(letters)):
@@ -40,12 +43,32 @@ def print_board(letters):
         else:
             line += " "
 
+
+import sys
+import os
+import threading
+import time
+
+def timer_1():
+    # print('#10\n')
+    global board
+    global user_words
+    board = [random.choice(cube) for cube in cubes]
+    random.shuffle(board)
+    print_board(board)
+    user_words = get_words_from_user(board)
+    print_result(board, user_words)
+
 def get_words_from_user(board):
+    # print('#2\n')
     print ("Type 'done!' when finished or 'board!' to reprint board.")
-    user_words = []
+    # user_words = []
+
     while True:
         word = input('Enter word: ')
         if word == 'done!':
+            global flg
+            flg = True
             break
         elif word == 'board!':
             print_board(board)
@@ -59,6 +82,7 @@ def get_words_from_user(board):
 
 
 def find_word(board, word, used_indices=None):
+    # print('#3\n')
     if len(word) == 0:
         return True
 
@@ -73,14 +97,17 @@ def find_word(board, word, used_indices=None):
 
 
 def get_possible_next_indices(board, used_indices, word):
+    # print('#4\n')
     return [i for i, letter in enumerate(board) if letter == word[0] and index_is_valid(i, used_indices, board)]
 
 
 def index_is_valid(index, used_indices, board):
+    # print('#5\n')
     return not used_indices or (adjacent(index, used_indices[-1], board) and index not in used_indices)
 
 
 def adjacent(pos1, pos2, board):
+    # print('#6\n')
     board_size = int(math.sqrt(len(board)))
     return (horizontal_adjacent(pos1, pos2, board_size) or
             vertical_adjacent(pos1, pos2, board_size) or
@@ -88,19 +115,23 @@ def adjacent(pos1, pos2, board):
 
 
 def horizontal_adjacent(pos1, pos2, board_size):
+    # print('#7\n')
     return abs(pos1 - pos2) == 1 and pos1 / board_size == pos2 / board_size
 
 
 def vertical_adjacent(pos1, pos2, board_size):
+    # print('#8\n')
     return abs(pos1 - pos2) == board_size
 
 
 def diagonal_adjacent(pos1, pos2, board_size):
+    # print('#9\n')
     return (abs(pos1 - pos2) == board_size - 1 and pos1 / board_size != pos2 / board_size
           or abs(pos1 - pos2) == board_size + 1)
 
 
 def print_result(board, user_words):
+    # print('#10\n')
     print ("Here are your results:")
     score = 0
 
@@ -121,13 +152,31 @@ def print_result(board, user_words):
     print ("Score: ", score)
 
 
-def main():
-    board = [random.choice(cube) for cube in cubes]
-    random.shuffle(board)
-    print_board(board)
-    user_words = get_words_from_user(board)
-    print_result(board, user_words)
+'''
+cubes = [
+    'aaafrs', 'aaeeee', 'aafirs', 'adennn', 'aeeeem',
+    'aeegmu', 'aegmnn', 'afirsy', 'bjkqxz', 'ccenst',
+    'ceiilt', 'ceilpt', 'ceipst', 'ddhnot', 'dhhlor',
+    'dhlnor', 'dh:lnor', 'eiiitt', 'emottt', 'ensssu',
+    'fiprsy', 'gorrvw', 'iprrry', 'nootuw', 'ooottu'
+]
+'''
 
+def main():
+    t1 = threading.Thread(target = timer_1,daemon = True)
+    print('\n\nYou have 60 seconds\n\n')
+    t1.start()
+    global flg
+    for i in range(60):
+        if flg == False:
+            time.sleep(1)
+            if i == 55:
+                print('          Warning!!!!!!5 seconds remaining\nEnter word:',end='')
+                print('\nTimer ends. Game Over!')
+    if flg == False:
+        print_result(board, user_words)
+    sys.exit()
 
 if __name__ == "__main__":
+
     main()
